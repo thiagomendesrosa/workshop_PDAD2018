@@ -16,10 +16,11 @@ fontsize: 18pt
 description: Minicurso de R aplicado a manipulação de microdados da Codeplan
 ---
 
-```{r, echo=F}
+```{r, echo=F, warning=F}
 library(knitr)
 library(stringr)
 library(forcats)
+library(lubridate)
 # Definir opções dos chunks
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
                       results = "hide")
@@ -111,7 +112,7 @@ Para detalhes sobre como utilizar o RMarkdown no RStudio, acesse [esse](http://r
 
 ## Estrutura do RStudio
 
-O RStudio é dividido em quatro painéis: o superior à esquerda apresenta os scripts abertos para uso; o inferior à esquerda apresenta o console, local em que os comandos e seus resultados são apresentados. Nesse painel há também uma aba para o terminal (cmd do Windows); o superior direito apresenta o ambiente, com os objetos ativos na sessão. Há mais três abas, com o histórico dos comandos executados, as conexões, *build* (para desenvolvimentos) e o Git (quando se está no ambiente de projetos com controle de versão); por fim, o inferior direito apresenta o diretório de trabalho, com as pastas e arquivos. Há ainda mais quatro abas, que apresentam os *plots* gerados, os pacotes disponíveis na biblioteca, a janela de ajuda e a janela de visualização (utilizadas por alguns pacotes para mostrar conteúdos da web).
+O RStudio é dividido em quatro painéis: o superior à esquerda apresenta os scripts abertos para uso; o inferior à esquerda apresenta o console, local em que os comandos e seus resultados são apresentados. Nesse painel há também uma aba para o terminal (cmd do Windows), uma aba para o `RMarkdown` e uma aba `Jobs`, para execução de scripts em segundo plano; o superior direito apresenta o ambiente, com os objetos ativos na sessão. Há mais três abas, com o histórico dos comandos executados, as conexões, *build* (para desenvolvimentos) e o Git (quando se está no ambiente de projetos com controle de versão); por fim, o inferior direito apresenta o diretório de trabalho, com as pastas e arquivos. Há ainda mais quatro abas, que apresentam os *plots* gerados, os pacotes disponíveis na biblioteca, a janela de ajuda e a janela de visualização (utilizadas por alguns pacotes para mostrar conteúdos da web).
 
 <img src="figuras/Rserver.png" style="width: 800px;display: block;margin-left: auto;margin-right: auto "/>
 
@@ -119,7 +120,7 @@ Na parte superior, existe uma barra de tarefas, com a qual você pode criar novo
 
 Por todos os painéis existem atalhos úteis para executar diversas tarefas (abrir um novo script, criar um novo projeto, salvar o script atual, criar uma nova pasta etc.).
 
-Para rodar uma linha comando, selecione os comandos desejados e aperte `Ctrl+Enter` ou clique no botão `Run`, na parte superior do painel. Caso o código seja escrito diretamente no console, basta pressionar `Enter`. Para verificar os últimos comandos enviados ao console, clique no painel e utilize a tecla `seta para cima`. Por padrão, quando o console exibe o símbolo `>`, ele pronto para uso, aguardando o envio de um novo comando. Quando o símbolo `+` é apresentado, ele está aguadando a conclusão de algum comando enviado para o console. Quando algum comando mais demorado está sendo executado, um símbolo vermelho, com a palavra `stop` aparece no canto superior esquerdo do console. Você pode interromper a execução do comando clicando nesse ícone.
+Para rodar uma linha comando, selecione a(s) linha(s) desejadas e aperte `Ctrl+Enter` ou clique no botão `Run`, na parte superior do painel. Caso o código seja escrito diretamente no console, basta pressionar `Enter`. Para verificar os últimos comandos enviados ao console, clique no painel e utilize a tecla `seta para cima`. Por padrão, quando o console exibe o símbolo `>`, ele pronto para uso, aguardando o envio de um novo comando. Quando o símbolo `+` é apresentado, ele está aguadando a conclusão de algum comando enviado. Quando algum comando mais demorado está sendo executado, um ícone vermelho, com a palavra `STOP` aparece no canto superior esquerdo do painel console. Você pode interromper a execução do comando clicando nesse ícone.
 
 
 ## Pacotes
@@ -178,6 +179,16 @@ Por fim, uma boa e velha máquina de buscas é fundamental. Quase todas as repos
 Vamos iniciar a atividade de manipulação de base de dados carregando a Pesquisa Distrital por Amostra de Domicílios 2018. A PDAD é uma pesquisa amostral conduzida pela Codeplan a cada dois anos, com representatividade para as 31 Regiões Administrativas, tendo por objetivo traçar as principais características dos domicílios e pessoas destas localidades.
 
 Vamos carregar os microdados da pesquisa de alguma maneiras diferentes. A PDAD 2018 está disponível no formato `.csv` no site da Codeplan, no seguinte [endereço](http://www.codeplan.df.gov.br/microdados-pdad-2018/). São cinco arquivos: dois deles contendo os microdados, referentes aos domicílios e aos moradores; dois arquivos de dicionário, um em formato `.xlsX` e outro em `.pdf`; e o questionário. Para começar, baixe esses arquivos para algum diretório de sua máquina.
+
+Consulte o diretório ativo do R, com a função `getwd()`. Para facilitar, salve os arquivos do R neste diretório ou altere o diretório padrão para um de sua preferência, com a função `setwd()`. Observação: o R utiliza o padrão de enderaçamento do Linux, então será sempre necessário trocar a barra `\` pela barra `/` quando o caminho for indicado.
+
+```{r}
+# Consultar diretório padrão
+getwd()
+# Alterar diretório padrão, por exemplo, para o disco D:
+# setwd("D:/")
+```
+
 
 As bases com microdados usualmente são separadas em tantos arquivos quanto necessário, seguidos sempre de uma documentação que detalha os aspectos técnicos, fornecendo informações para sua manipulação.
 
@@ -241,6 +252,8 @@ Para termos o dicionário de dados da base de moradores prontamente acessível d
 dic_moradores <- readxl::read_excel("bases/Dicionário-de-Variáveis-PDAD-2018.xlsx",
                                     skip = 1, sheet = 2)
 ```
+
+O argumento `skip=1` informam à função que queremos que a primeira linha do arquivo seja ignoradae, enquanto o argumento `sheet=2`  indica que queremos carregar a segunda planilha.
 
 Agora que temos as descrições das variáveis, disponível na coluna `Descrição da coluna`, vamos adicionar esses rótulos à base da pdad, com ajuda do pacote `Hmisc`. Esse passo, apesar de dispensável, pode nos ajudar no entendimento do significado das variáveis de maneira rápida, evitando consultas ao dicionário.
 
@@ -321,6 +334,12 @@ table(ra_codificada$ra)
 
 Apesar de parecer mais complexo, isso evita que tenhamos de copiar, colar ou escrever manualmente o nome de todas as 31 Regiões Administrativas. Se o número de categorias fosse mais elevado, certamente esses passos seriam fundamentais para dar agilidade à tarefa a ser realizada.
 
+
+<div class="alert alert-info">
+*Observação: Quando estamos trabalhando com um objeto do tipo `data.frame`, podemos acessar suar colunas com o símbolo `$` após o nome do objeto. Alternativamente, podemos acessar as colunas com o operados `[,]`, no qual o lado esquerdo da vígula indica as linhas a serem acessadas e o lado esquerdo as colunas.* 
+</div>
+
+
 Agora que já conseguimos identificar qual foi a amostra em cada uma das RAs, vamos fazer uma gráfico simples, para verificarmos onde obtivemos as maiores amostras. Para isso, vamos usar a o pacote `ggplot`.
 
 O `ggplot` trabalha com *data.frames*. Uma vantagem do `ggplot` é que você pode adicionar camadas a um gráfico existente de maneira simples e rápida, com o operador `+`. A função `aes()` é utilizada para especificar quais serão os eixos do gráfico, usualmente x e y. Para um tutorial mais completo, acesse [esse site](http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html).
@@ -330,7 +349,7 @@ O `ggplot` trabalha com *data.frames*. Uma vantagem do `ggplot` é que você pod
 RA %>%
   # Criar a área de plotagem, com o eixo X
 ggplot(aes(x=RA)) +
-  # Inserir a geometrica do tipo "Barra", com a opção de contagem (gerada automaticamente no eixo y)
+  # Inserir a geometria do tipo "Barra", com a opção de contagem (gerada automaticamente no eixo y)
   geom_bar(stat = "count") +
   # Inverter os eixos
   coord_flip()
@@ -366,7 +385,7 @@ Posteriormente vamos aprender a realizar outras configurações nos gráficos ge
 
 Agora que já aprendemos a carregar e manipular a base de moradores, carregue as informações de domicílios para prosseguirmos com a análise. Adicionalmente, se for de seu interesse, atribua os labels a essa base também.
 
-```{r, include=FALSE}
+```{r}
 # Carregar a base completa de domicílios
 pdad_2018_domicilios <- data.table::fread("http://www.codeplan.df.gov.br/wp-content/uploads/2019/06/pdad_2018_domicilios.csv",
                                     dec = ",",encoding = "Latin-1")
@@ -390,9 +409,9 @@ Hmisc::describe(pdad_2018_domicilios)
 
 ## Trabalhando com datas
 
-Vez ou outra nos deparamos com base de dados com variáveis do tipo data. Dentro da família `tidyverse`, temos o pacote `lubridate`, que facilita muito a manipulação deste tipo de dados. Se tivermos uma base de dados, por exemplo, com a data de nascimento das pessoas, é interessante podermos calcular a idade de maneira rápida e eficiente. Na PDAD 2018 nos temos a `datavisita` informada para todas as pessoas. Vamos utilizar essa variável para manipular datas.
+Vez ou outra nos deparamos com bases de dados que contêm variáveis do tipo data. Dentro da família `tidyverse`, temos o pacote `lubridate`, que facilita muito a manipulação deste tipo de dado.Na PDAD 2018, temos a `datavisita`, que traz o dia em que as informações foram coletadas no domicílio. Vamos utilizar essa variável para manipular datas.
 
-Vamos iniciar a análise verificando como o campo de data está preenchido, contando o número de caracteres desse campo.
+Vamos verificar como estão preencidas as primeiras linhas dessa coluna, com auxílio da função `head()`.
 
 ```{r}
 # Verificar as primeiras informações da coluna datavisita
@@ -427,8 +446,10 @@ pdad_2018_domicilios %>%
 
 Assim, temos a informação de que a coleta teve início em março e foi finalizada em outubro. Também verificamos que o mês com a maior quantidade de domicílios coletados foi agosto. Vamos verificar essas informações por Região Administrativa.
 
+Antes, vamos criar uma variável com a RA renomeada, de modo a facilitar a visualização.
 
-```{r, include=FALSE}
+
+```{r}
 # Criar uma variável com o nome das RAs na base de domicílios
 pdad_2018_domicilios <- pdad_2018_domicilios %>%
   dplyr::mutate(RA=factor(A01ra,
@@ -467,7 +488,7 @@ pdad_2018_domicilios <- pdad_2018_domicilios %>%
 ```
 
 ```{r}
-coleta<-
+coleta <-
 # Utilizar a base de domicílios
 pdad_2018_domicilios %>%
   # Selecionar a data da pesquisa
@@ -481,11 +502,14 @@ pdad_2018_domicilios %>%
   # Contar a coleta por mês
   dplyr::summarise(n=n())
 
+# Visualizar resultado
+View(coleta)
 ```
+
 
 ## Gravar uma tabela no formato ".csv"
 
-Agora que geramos a tabela com as informações de coleta, vamos salvar os resultados em um arquivo `.csv`. Para isso, vamos utilizar a função `write.table()`, do pacote `utils`. Com a função, informe o objeto que você quer gerar o arquivo no primeiro argumento e o nome do arquivo a ser gerado. O arquivo será salvo no seu diretório de trabalho, por padrão. Caso você queria salvá-lo em outro local, basta informar o caminho desejado antes do nome do arquivo (e.g. `D:/Backup Thiago/Thiago/curso_r`, para salvar na minha pasta).
+Agora que geramos a tabela com as informações de coleta, vamos salvar os resultados em um arquivo `.csv`. Para isso, vamos utilizar a função `write.table()`, do pacote `utils`. Com a função, informe o objeto que você quer utilizar para gerar o arquivo no primeiro argumento e o nome do arquivo a ser gerado no segundo argumento. O arquivo será salvo no seu diretório de trabalho, por padrão. Caso você queria salvá-lo em outro local, basta informar o caminho desejado antes do nome do arquivo (e.g. `bases/`, para salvar em um subdiretório chamado bases).
 
 Assim como as colunas possuem nomes, as linhas também podem ser nomeadas no R. Quando não damos um nome específico para as linhas, elas são, por padrão, nomeadas com números inteiros sequenciais, de 1 até o número de linhas da tabela. Consulte essa informação com a função `row.names()`.
 
@@ -496,18 +520,13 @@ write.table(coleta,"bases/coleta.csv",
             row.names = F, sep = ";")
 ```
 
-Vamos verificar o resultado localmente. Exporte a tabela gerada, selecionando o arquivo gerado no painel de arquivos, clicando em `More` -> `Export`. Abra o arquivo e consulte as informações geradas.
-
-<img src="figuras/export.png" style="width: 800px;display: block;margin-left: auto;margin-right: auto "/>
-
-Com isso, podemos compartilhar a informação com usuários do excel ou qualquer outro software que faça leitura deste tipo de arquivo.
+Vamos verificar o resultado localmente. Procure no diretório o arquivo que acabou de ser criado e abra-o. Assim, você pode compartilhar esse resultado com outros pesquisadores.
 
 ## Operações com datas
 
 Vamos agora aprender a manipular as datas, fazendo operações de intervalos de tempo.
 
 ```{r}
-library(lubridate)
 # Criar um objeto com a data de referência da pesquisa
 ref <- dmy("15-07-2018")
 
@@ -570,7 +589,7 @@ inflacao_df <- inflacao %>%
 
 Agora temos um inflator para atualizar os valores monetários da PDAD 2018 para o mês mais recente. Iremos utilizar essa informação mais tarde, para construirmos a renda real.
 
-Vamos aproveitar a base do IPCA para aprendermos uma manipulação muito importante de bases de dados. Para fazer gráficos, o formato `long` é muito útil, enquanto o formato `wide` torna a visualização no formato tabela ou operações em colunas mais simples. Vamos treinar estes conceitos carregando a inflação, dos últimos 12 meses, do DF, do Brasil, de São Paulo e do Rio de Janeiro.
+Vamos aproveitar a base do IPCA para aprendermos uma manipulação muito importante de bases de dados. Para fazer gráficos, o formato `long` é muito útil, enquanto o formato `wide` apresenta a tabela no formato de colunas. Vamos treinar estes conceitos carregando a inflação, dos últimos 12 meses, do DF, do Brasil, de São Paulo e do Rio de Janeiro.
 
 ```{r}
 inflacao <- sidrar::get_sidra(api = '/t/1419/n1/all/n7/3301,3501/n6/5300108/v/63/p/all/c315/7169/d/v63%202')
@@ -593,7 +612,7 @@ inflacao_wide %>%
   tidyr::gather("Local","Valor",-1)
 ```
 
-A função `gather()` "junta" os valores para colocar cada caso em uma linha. Vamos agora fazer um gráfico de linhas com essas informações.
+A função `gather()` "junta" os valores para colocar cada caso em uma linha. Vamos agora fazer um gráfico de linhas com essas informações, plotando a inflação mensal dos últimos 12 meses para essas localidades.
 
 ```{r}
 inflacao_long %>%
@@ -629,7 +648,7 @@ inflacao_long %>%
 
 ## Criação da renda domiciliar per capita
 
-Uma variável bastante utilizada é a renda domiciliar. Vamos construir essa variável, utilizando a seguinte metodologia: toda vez que um morador se recusar ou não souber informar algum rendimento, ele será desconsiderado do cálculo e a renda de todo o domicílio ficará com valor ausente. Além disso, vamos retirar do computo os empregados domésticos moradores do domicílios e seus parentes.
+Uma variável bastante utilizada nas análises é a renda domiciliar. Vamos construir essa variável, utilizando a seguinte metodologia: toda vez que um morador se recusar ou não souber informar algum rendimento, ele será desconsiderado do cálculo e a renda de todo o domicílio ficará com valor ausente. Além disso, vamos retirar do cômputo os empregados domésticos moradores do domicílio e seus parentes, além dos pensionistas.
 
 ```{r}
 renda_domiciliar <- pdad_2018_moradores %>%
@@ -648,7 +667,7 @@ renda_domiciliar <- pdad_2018_moradores %>%
                                               "G201_M","G202_M",
                                               "G203_M","G204_M")],na.rm = F)) %>%
   # Desconsiderar os empregados domesticos moradores e seus parentes
-  dplyr::filter(!E02 %in% c(17,18)) %>%
+  dplyr::filter(!E02 %in% c(16,17,18)) %>%
   # Agrupar por domicílio
   dplyr::group_by(A01nFicha) %>%
   # Somar os valores por domicílios
@@ -657,19 +676,24 @@ renda_domiciliar <- pdad_2018_moradores %>%
                    renda_dom_pc=renda_dom/pessoas)
 ```
 
-Nesse código, o aspecto mais importante é a opção `na.rm=F`, na qual informamos que os valores ausentes não devem ser desconsiderados do cálculo. 
+Nesse código, o aspecto mais importante é a opção `na.rm=F`, na qual informamos que os valores ausentes não devem ser desconsiderados do cálculo. Verifique o valor amostral médio gerado com a função `mean`, agora considerando apenas os casos válidos.
+
+```{r}
+mean(renda_domiciliar$renda_dom, na.rm=T)
+```
+
 
 # Manipulação da PDAD 2018 com expansão dos resultados
 
-A delimitação considerada pela PDAD 2018 pode ser observada na imagem abaixo.
+A delimitação das Regiões Administrativas considerada pela PDAD 2018 pode ser observada na imagem abaixo:
 
-<img src="figuras/delim.png" style="width: 400px;display: block;margin-left: auto;margin-right: auto "/>
+<img src="figuras/delim.png" style="width: 600px;display: block;margin-left: auto;margin-right: auto "/>
 
-E a área de cobertura considera foi a seguinte.
+E a área de cobertura considera foi a seguinte:
 
-<img src="figuras/mapa1.jpeg" style="width: 400px;display: block;margin-left: auto;margin-right: auto "/>
+<img src="figuras/mapa1.jpeg" style="width: 600px;display: block;margin-left: auto;margin-right: auto "/>
 
-A área acima corresponde às áreas urbanas e às áreas rurais com características urbanas. Tal área compreende mais de 97% da população do DF.
+A área acima corresponde às áreas urbanas e às áreas rurais com características urbanas. Tal área abrange a moradia de mais de 97% da população do DF.
 
 A PDAD 2018 foi uma pesquisa amostral, que selecionou domicílios particulares, divididos em estratos de regiões, conforme a delimitação apresentada anteriormente. Além das 31 Regiões Administrativas presentes no mapa anterior, foram considerados níveis territoriais ainda mais específicos para quatro RAs (Águas Claras, Ceilândia, Plano Piloto e São Sebastião), totalizando 38 localidades. A imagem abaixo ilustra o conceito de amostragem (imagem extraída do site  [mathcaptain.com](http://www.mathcaptain.com/statistics/stratified-sampling.html))   
 
@@ -677,7 +701,7 @@ A PDAD 2018 foi uma pesquisa amostral, que selecionou domicílios particulares, 
 
 Sendo assim, as estimativas fornecidas pela pesquisa estão sujeitas a um erro amostral, o que torna necessária a consideração de seu desenho amostral para seu cálculo. É com essas informações que construímos intervalos de confiança para as estimativas. De maneira simples, queremos fornecer, com algum grau de confiança, qual o verdadeiro valor populacional dada a amostra coletada.
 
-A população considerada para a PDAD 2018 parte das estimativas populacionais para o DF, publicadas pelo Instituto Brasileiro de Geografia e Estatística (IBGE), em setembro de 2018. Essa população foi alocada nas RAs pela equipe da Dipos/Codeplan e ajustada para a área de alcance da PDAD 2018. A diferença entre as projeções populacionais disponíveis [neste link](http://www.codeplan.df.gov.br/wp-content/uploads/2018/02/Proje%C3%A7%C3%B5es-Populacionais-Estruturas-Et%C3%A1rias-por-RA-2010-2020.xlsx) e os resultados da PDAD se devem as diferenças entre a área de alcance da PDAD, a população de interesse e as delimitações consideradas.^[Conforme apontado anteriormente, a PDAD investiga domicílios particulares em áreas urbanas e áreas rurais com características urbanas. Assim sendo, todos os domicílios coletivos e aqueles situados em áreas rurais são desconsiderados na pesquisa. Além disso, existem algumas diferenças entre as delimitações das RAS consideradas nas projeções e na PDAD.]
+A população considerada para a PDAD 2018 parte das estimativas populacionais para o DF, publicadas pelo Instituto Brasileiro de Geografia e Estatística (IBGE), em setembro de 2018. Essa população foi alocada nas RAs pela equipe da Dipos/Codeplan e ajustada para a área de alcance da PDAD 2018. A diferença entre as projeções populacionais disponíveis [neste link](http://www.codeplan.df.gov.br/wp-content/uploads/2018/02/Proje%C3%A7%C3%B5es-Populacionais-Estruturas-Et%C3%A1rias-por-RA-2010-2020.xlsx) e os resultados da PDAD se devem às diferenças entre a área de alcance da PDAD, a população de interesse e as delimitações consideradas.^[Conforme apontado anteriormente, a PDAD investiga domicílios particulares em áreas urbanas e áreas rurais com características urbanas. Assim sendo, todos os domicílios coletivos e aqueles situados em áreas rurais são desconsiderados na pesquisa. Além disso, existem algumas diferenças entre as delimitações das RAS consideradas nas projeções e na PDAD.]
 
 Nesta oficina iremos aprender a declarar o plano amostral da PDAD 2018 no R, utilizando o pacote `survey`. Vamos utilizar também o pacote `srvyr`, que roda o pacote `survey` sob a lógica do pacote `dplyr`, para calcular as estimativas.
 
@@ -710,7 +734,7 @@ pdad <- pdad_2018_moradores %>%
 
 Consulte o número de linhas e colunas da base criada. Repare que o número de linhas permaneceu o mesmo da base posicionada à esquerda, i.e., base de moradores. Como não havia nenhuma repetição na base de domicílios, o resultado já era esperado. Experimente rodar o código novamente, agora substituindo a função `left_join` por `right_join` e perceba que o resultado é exatamente o mesmo. Esse é um cuidado que se deve ter quando o desejo é ligar duas bases. Caso as chaves de ligação tivessem múltiplos casos, a função iria realizar as combinações pertinentes, o que, geralmente, causa um grande aumento no tamanho da base.
 
-Note que a função retornou um aviso no console, com a seguinte mensagem: `Joining, by = "A01nficha"`. Por padrão, a função de `left_join()` usa como argumento as colunas de mesmo nome. Caso as chaves de ligação tenham nomes distintos em cada base, podemos informar na função da seguinte maneira.
+Note que a função retornou um aviso no console, com a seguinte mensagem: `Joining, by = "A01nFicha"`. Por padrão, a função de `left_join()` usa como argumento as colunas de mesmo nome. Caso as chaves de ligação tenham nomes distintos em cada base, podemos informar na função da seguinte maneira.
 
 ```{r}
 # Fazer o join das bases
@@ -842,7 +866,7 @@ amostra %>%
 
 Vamos agora elencar algumas variáveis para construirmos um pequeno relatório. Vamos construir gráficos e tabelas para: população, por faixa etária e sexo; distribuição do rendimento do trabalho, por faixas; e tipo de esgotamento sanitário do domicílio. E montar um mini relatório com essas informações.
 
-As informações serão criadas com a função `mutate()`, as faixas de idade e de rendimento serão criadas com auxílio da função `cut()`. Ao final, utilizaremos a função `mutate_if()` para transformar as variáveis do tipo *caracter* em fator e, por fim, utilizaremos a função `select()` para selecionar as variáveis desejadas. Para criar as faixas de rendimento, consideraremos o número de salários mínimos, vigentes em 2015.
+As informações serão criadas com a função `mutate()`, as faixas de idade e de rendimento serão criadas com auxílio da função `cut()`. Ao final, utilizaremos a função `mutate_if()` para transformar as variáveis do tipo *caracter* em fator e, por fim, utilizaremos a função `select()` para selecionar as variáveis desejadas. Para criar as faixas de rendimento, consideraremos o número de salários mínimos, vigente em 2018.
 
 ```{r}
 # Criar um objeto com o salário mínimo em 2018
@@ -917,10 +941,11 @@ vars_relatorio <- amostra %>%
   srvyr::select(RA,E02,idade_calculada,G05,sexo,esgotamento_caesb,idade_faixas,faixas_salario)
 ```
 
-Criada a base com as variáveis, vamos calcular os totais para cada um dos grupos, juntamente com seus intervalos de confiança. Para isso, vamos utilizar as funções `group_by()`, para conseguirmos agrupar os dados pelas categorias desejadas e a função `summarise()`, que calculará os totais ou proporções para cada grupo. Os intervalos de confiança são calculados com a função `vartype="ci"`. Note que, como existem idades sem resposta, com o código `999`, precisamos retirá-las com a função `filter()`.
+Criado esse objeto auxiliar com as variáveis desejadas, vamos calcular os totais para cada um dos grupos, juntamente com seus intervalos de confiança. Para isso, vamos utilizar as funções `group_by()`, para conseguirmos agrupar os dados pelas categorias desejadas e a função `summarise()`, que calculará os totais ou proporções para cada grupo. Os intervalos de confiança são calculados com a função `vartype="ci"`. 
 
 ```{r}
 # Construir um objeto com as idades calculadas, por faixas de idade e sexo
+# para montarmos a pirâmide etária
 piramide <-
 vars_relatorio %>%
   # Agrupar por faixas de idade e sexo
@@ -970,7 +995,7 @@ piramide %>%
 piramide_grafico
 ```
 
-Para montar a pirâmide, usamos duas vezes a função `geom_bar()`, uma para desenhar a distribuição etária feminina e outra a masculina. Como o formato desejado é a pirâmide, escolhemos uma das categorias e negativamos seus valores, para que ela seja apresentada na direção oposta da abscissa. O mesmo procedimento deve ser adotado para as informações dos erros amostrais, desenhados com a função `geom_errorbar()`. Para que as informações sejam apresentadas em barras horizontais, ao invés de vertical, usamos a função `coord_flip()`, que inverte as coordenadas do gráfico. Por fim, realizamos alguns ajustes de apresentação das informações, retirando os nomes dos eixos com a função `labs()`, com a função `scale_fill_discrete()` para retirar o nome da legenda e a função `scale_y_continuos()` para alterar a formatação numérica dos *labels*. Note que, para isso, criamos uma função com uma série de argumentos de formação: valor absoluto `abs()`, retiramos a notação científica, alteramos a forma de exibição do separador decimal e acrescentamos um separador de milhar por ponto.
+Para montar a pirâmide, usamos duas vezes a função `geom_bar()`, uma para desenhar a distribuição etária feminina e outra a masculina. Como o formato desejado é a pirâmide, escolhemos uma das categorias e negativamos seus valores, para que ela seja apresentada na direção oposta da abscissa. O mesmo procedimento deve ser adotado para as informações dos erros amostrais, desenhados com a função `geom_errorbar()`. Para que as informações sejam apresentadas em barras horizontais, ao invés de verticais, usamos a função `coord_flip()`, que inverte as coordenadas do gráfico. Por fim, realizamos alguns ajustes de apresentação das informações, retirando os nomes dos eixos com a função `labs()`, retirando o nome da legenda com a função `scale_fill_discrete()` e alterarando a formatação numérica dos *labels* com a função `scale_y_continuos()`. Note que, para isso, criamos uma função com uma série de argumentos de formação: valor absoluto `abs()`, alteramos a forma de exibição do separador decimal e acrescentamos um separador de milhar por ponto.
 
 Para construir o gráfico com os salários, os passos são análogos aos realizados para construção do gráfico anterior. A única diferença é que agora utilizamos a função `theme()` para retirar a legenda da apresentação dos dados.
 
@@ -1042,7 +1067,7 @@ salario2 %>%
 ```
 
 
-Para o último gráfico, como estamos realizando uma estatística para o domicílio, precisamos filtrar para selecionarmos apenas uma informação. Fazemos isso pegando a linha referente apenas ao responsável, com auxílio da função `filter()`. Como maneira de facilitar a leitura dos dados, adicionamos os valores exatos de cada coluna com a função `geom_text()`
+Para o último gráfico, como estamos realizando uma estatística para o domicílio, precisamos filtrar para selecionarmos apenas a informação do chefe. Fazemos isso com auxílio da função `filter()`. Como maneira de facilitar a leitura dos dados, adicionamos os valores exatos de cada coluna com a função `geom_text()`
 
 ```{r}
 # Construir o objeto com o esgotamento sanitário
@@ -1072,7 +1097,7 @@ esgotamento %>%
   scale_y_continuous(labels = scales::percent)+
   # Inserir informações dos resultados no gráfico
   geom_text(aes(label = paste0(round(100*n,0),"%")),
-                size=3, fontface = "bold", 
+                size=4, fontface = "bold", 
                 vjust = -0.25,hjust=1.25)
 
 # Plotar grafico
@@ -1119,7 +1144,7 @@ tema_branco <- theme_minimal()+
 # Construir o gráfico de pizza
 esgotamento2 %>%
   # Plotar o gráfico, com as quantidades no eixo y, o preenchimento com as categorias,
-  # reordenando as quabtudades, e o valor 1 para travar o eixo x
+  # reordenando as quantudades, e o valor 1 para travar o eixo x
   ggplot(aes(x=1,y=n,fill=fct_reorder(esgotamento_caesb,n)))+
   # Construir as "barras"
   geom_bar(stat="identity")+
@@ -1135,6 +1160,20 @@ esgotamento2 %>%
   # sobreposições
   geom_text_repel(aes(label = percent(n), y=pos), size=5, color="white",
                   fontface="bold")
+```
+
+
+```{r}
+# Construir o objeto com as informações de esgotamento sanitário
+vars_relatorio %>%
+  # Filtar para o responsável
+  srvyr::filter(E02==1) %>%
+  # Agrupar por tipo de esgotamento
+  srvyr::group_by(esgotamento_caesb) %>%
+  # Calcular as proporções
+  srvyr::summarise(n=survey_mean(na.rm = T,vartype = "ci")) %>%
+  ggplot()+
+  geom_bar(aes(x=esgotamento_caesb,y=n,fill=esgotamento_caesb),stat = "identity",width = 0.75,alpha=0.5) 
 ```
 
 # Criando relatórios com o Rmarkdown
