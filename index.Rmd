@@ -1,7 +1,7 @@
 --- 
-title: "Curso R"
+title: "Workshop - PDAD 2018 aplicada ao R"
 author: "Thiago Mendes Rosa"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(),'%d/%m/%Y')`"
 output:
   html_document:
     highlighting: tango
@@ -37,21 +37,22 @@ options(scipen=999)
 
 # Agenda
 
-Esta oficina tem o intuito de apresentar como o software R pode ser utilizado para manipular os microdados da PDAD 2018, auxiliando na criação de tabelas, gráficos e relatórios. Para tanto, os principais pacotes a serem utlizados serão os que compõe o `tidyverse`, para ajuste de dados, e os pacotes `survey` e `srvyr`, para análise de dados amostrais. 
+Esta oficina tem o intuito de apresentar como o software R pode ser utilizado para manipular os microdados da PDAD 2018, auxiliando na criação de tabelas, gráficos e relatórios. Para tanto, os principais pacotes a serem utilizados são aqueles que compõe o `tidyverse`, para ajuste de dados, e os pacotes `survey` e `srvyr`, para análise de dados amostrais.
 
 Informações mais aprofundadas sobre o `tidyverse` estão disponíveis no livro [R for data science](http://r4ds.had.co.nz/). 
 
-Mais informações sobre o R estão disponíveis em: [R pragmático](https://curso-r.github.io/ragmatic-book/) e [Curso de R](http://material.curso-r.com/rbase/) e [R para cientistas sociais](http://www.uesc.br/editora/livrosdigitais_20140513/r_cientistas.pdf).
+Mais informações sobre o R estão disponíveis em: [R pragmático](https://curso-r.github.io/ragmatic-book/), [Curso de R](http://material.curso-r.com/rbase/) e [R para cientistas sociais](http://www.uesc.br/editora/livrosdigitais_20140513/r_cientistas.pdf).
 
 **Público-alvo**
 
-- Servidores do GDF.
-- Pesquisadores em geral
+- Servidores do GDF;
+- Pesquisadores em geral.
 
 **Requisitos desejáveis:**
 
-- Noções de lógica de programação.
-- Noções básicas de estatística.
+- Noções de lógica de programação;
+- Noções básicas de estatística;
+- Noções básicas da linguagem R;
 - Noções básicas de inglês (para facilitar pesquisas e entendimento das funções).
 
 **Conteúdo:**
@@ -102,13 +103,27 @@ O **Markdown** é um sistema para tornar a escrita e a leitura de textos mais si
 
 No R, o RMarkdown é um tipo de documento especial que contém tanto textos, no formato markdown, quanto códigos, em R. Os códigos em R podem ser inseridos diretamente no texto ou separados em estruturas específicas (*chunks*). Os códigos são executados sempre que o documento é processado para algum formato específico, que pode ser HTML (como esse documento que você está lendo), em PDF (formato $\LaTeX$) ou mesmo microsoft Word. Apresentações de slides também podem ser facilmente realizadas com o Rmarkdow, nos formatos `HTML` ou $\LaTeX$.
 
-Suas principais vantagens são a **velocidade**, **reprodutibilidade** e **eficiência** na produção destes relatórios. Por exemplo, a produção de relatórios para 31 Regiões Administrativas do DF, a partir dos dados da PDAD 2018, ficou muito mais rápida e padronizada.
+Suas principais vantagens são a **velocidade**, **reprodutibilidade** e **eficiência** na produção destes relatórios. Por exemplo, a produção dos relatórios para 31 Regiões Administrativas do DF, a partir dos dados da PDAD 2018, com feita em Rmarkdown, tornando sua produção mais rápida e padronizada.
 
-Para detalhes sobre como utilizar o RMarkdown, acesse [esse](http://r4ds.had.co.nz/r-markdown.html) e [esse](http://rmarkdown.rstudio.com/lesson-1.html) sites (em inglês).
+Para detalhes sobre como utilizar o RMarkdown no RStudio, acesse [esse](http://r4ds.had.co.nz/r-markdown.html) e [esse](http://rmarkdown.rstudio.com/lesson-1.html) sites (em inglês).
 
 # Preliminares
 
+## Estrutura do RStudio
+
+O RStudio é dividido em quatro painéis: o superior à esquerda apresenta os scripts abertos para uso; o inferior à esquerda apresenta o console, local em que os comandos e seus resultados são apresentados. Nesse painel há também uma aba para o terminal (cmd do Windows); o superior direito apresenta o ambiente, com os objetos ativos na sessão. Há mais três abas, com o histórico dos comandos executados, as conexões, *build* (para desenvolvimentos) e o Git (quando se está no ambiente de projetos com controle de versão); por fim, o inferior direito apresenta o diretório de trabalho, com as pastas e arquivos. Há ainda mais quatro abas, que apresentam os *plots* gerados, os pacotes disponíveis na biblioteca, a janela de ajuda e a janela de visualização (utilizadas por alguns pacotes para mostrar conteúdos da web).
+
+<img src="figuras/Rserver.png" style="width: 800px;display: block;margin-left: auto;margin-right: auto "/>
+
+Na parte superior, existe uma barra de tarefas, com a qual você pode criar novos scripts, projetos, abrir arquivos, executar buscas etc. São formas de você executar funções por *point-and-click*. Por exemplo, você pode alterar a visualização do RStudio server em `Tools` -> `Global Options...` -> `Appereance`.
+
+Por todos os painéis existem atalhos úteis para executar diversas tarefas (abrir um novo script, criar um novo projeto, salvar o script atual, criar uma nova pasta etc.).
+
+Para rodar uma linha comando, selecione os comandos desejados e aperte `Ctrl+Enter` ou clique no botão `Run`, na parte superior do painel. Caso o código seja escrito diretamente no console, basta pressionar `Enter`. Para verificar os últimos comandos enviados ao console, clique no painel e utilize a tecla `seta para cima`. Por padrão, quando o console exibe o símbolo `>`, ele pronto para uso, aguardando o envio de um novo comando. Quando o símbolo `+` é apresentado, ele está aguadando a conclusão de algum comando enviado para o console. Quando algum comando mais demorado está sendo executado, um símbolo vermelho, com a palavra `stop` aparece no canto superior esquerdo do console. Você pode interromper a execução do comando clicando nesse ícone.
+
+
 ## Pacotes
+
 Uma das funções mais básicas é instalar e carregar um pacote no R. Por exemplo:
 
 ```{r, warning=FALSE, message=FALSE}
@@ -116,7 +131,7 @@ Uma das funções mais básicas é instalar e carregar um pacote no R. Por exemp
 library(tidyverse) # Carregar o pacote "tidyverse"
 ```
 
-Note que o caractere `#` é utilizado para escrever comentários na codificação. Documentar bem seu código é fundamental para as pessoas que trabalham com você entendam o que foi realizado. Além disso, é fundamental para que uma tarefa que dependa desse código possa ser executada ou alterada por outro pesquisador. Lembre-se que tudo o que produzimos é público e deve ser o mais acessível possível para qualquer pessoa! Para comentar uma série de linhas ao mesmo tempo, utilize o atalho `Ctrl`+`Shift`+`C` após selecioná-las.
+Note que o caractere `#` é utilizado para escrever comentários na codificação. Documentar bem seu código é importante para as pessoas que trabalham com você entendam o que foi realizado. Além disso, é fundamental para que uma tarefa que dependa desse código possa ser executada ou alterada por outro pesquisador. Lembre-se que tudo o que produzimos é público e deve ser o mais acessível possível para qualquer pessoa! Para comentar uma série de linhas ao mesmo tempo, utilize o atalho `Ctrl`+`Shift`+`C` após selecioná-las.
 
 Tão importante quanto utilizar um pacote é citar ele no seu trabalho. Para tanto, utilize a função `citation()`.
 
