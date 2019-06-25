@@ -16,7 +16,7 @@ fontsize: 18pt
 description: Minicurso de R aplicado a manipulação de microdados da Codeplan
 ---
 
-```{r, echo=F, warning=F}
+```{r, echo=F, warning=F, message=F}
 library(knitr)
 library(stringr)
 library(forcats)
