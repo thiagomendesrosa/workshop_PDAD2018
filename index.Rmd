@@ -120,7 +120,7 @@ Na parte superior, existe uma barra de tarefas, com a qual você pode criar novo
 
 Por todos os painéis existem atalhos úteis para executar diversas tarefas (abrir um novo script, criar um novo projeto, salvar o script atual, criar uma nova pasta etc.).
 
-Para rodar uma linha comando da janela de *Script*, selecione a(s) linha(s) desejadas e aperte `Ctrl+Enter` ou clique no botão `Run`, na parte superior do painel. Caso o código seja escrito diretamente no console, basta pressionar `Enter`. Para verificar os últimos comandos enviados ao console, clique neste painel e utilize a tecla `seta para cima &uarr`. Por padrão, quando o console exibe o símbolo `>`, ele está pronto para uso, aguardando o envio de um novo comando. Quando o símbolo `+` é apresentado, ele está aguadando a conclusão de algum comando enviado. Quando algum comando mais demorado está sendo executado, um ícone vermelho, com a palavra `STOP` aparece no canto superior direito do painel console. Você pode interromper a execução do comando clicando nesse ícone.
+Para rodar uma linha comando da janela de *Script*, selecione a(s) linha(s) desejadas e aperte `Ctrl+Enter` ou clique no botão `Run`, na parte superior do painel. Caso o código seja escrito diretamente no console, basta pressionar `Enter`. Para verificar os últimos comandos enviados ao console, clique neste painel e utilize a tecla `seta para cima &uarr`. Por padrão, quando o console exibe o símbolo `>`, ele está pronto para uso, aguardando o envio de um novo comando. Quando o símbolo `+` é apresentado, ele está aguardando a conclusão de algum comando enviado. Quando algum comando mais demorado está sendo executado, um ícone vermelho, com a palavra `STOP` aparece no canto superior direito do painel console. Você pode interromper a execução do comando clicando nesse ícone.
 
 
 ## Pacotes
@@ -183,7 +183,7 @@ Vamos carregar os microdados da pesquisa de alguma maneiras diferentes. A PDAD 2
 Consulte o diretório ativo do R, com a função `getwd()`. Para facilitar, salve os arquivos do R neste diretório ou altere o diretório padrão para um de sua preferência, com a função `setwd()`. 
 
 <div class="alert alert-info">
-*Observação: o R utiliza o padrão de enderaçamento do Linux, então será sempre necessário trocar a barra `\` pela barra `/` quando o caminho for indicado.* 
+*Observação: o R utiliza o padrão de endereçamento do Linux, então será sempre necessário trocar a barra `\` pela barra `/` quando o caminho for indicado.* 
 </div>
 
 
@@ -199,7 +199,7 @@ As bases com microdados usualmente são separadas em tantos arquivos quanto nece
 
 ## Método point-and-click
 
-Para carregar a pesquisa por esse metódo, clique em `Import Dataset`, no atalho do painel `Ambiente`. O RStudio vem configurado com duas opções para você importar os dados. Vamos ver a primeira delas: `From Text(base)`.
+Para carregar a pesquisa por esse método, clique em `Import Dataset`, no atalho do painel `Ambiente`. O RStudio vem configurado com duas opções para você importar os dados. Vamos ver a primeira delas: `From Text(base)`.
 
 <img src="figuras/import1.png" style="width: 800px;display: block;margin-left: auto;margin-right: auto "/>
 
@@ -239,7 +239,7 @@ pdad_2018_moradores <- data.table::fread("bases/pdad_2018_moradores.csv",
                                     dec = ",",encoding = "Latin-1")
 ```
 
-Com a função `fread()` é possível carregar a base de ambas as maneiras vistas anteriormente. Note que a função `fread()` detectou o delimitador automaticamente. Informamos apenas que o separador decimal da nossa base é a vírgula, com a opção `dec=","` e que o enconding do arquivo é `enconding=Latin-1`. Essa última opção é importante quando estamos transitando arquivos salvos em diferentes plataformas, principalmente entre Windows e Linux, que possuem formas distintas de tratar caracteres especiais.
+Com a função `fread()` é possível carregar a base de ambas as maneiras vistas anteriormente. Note que a função `fread()` detectou o delimitador automaticamente. Informamos apenas que o separador decimal da nossa base é a vírgula, com a opção `dec=","` e que o *enconding* do arquivo é `enconding=Latin-1`. Essa última opção é importante quando estamos transitando arquivos salvos em diferentes plataformas, principalmente entre Windows e Linux, que possuem formas distintas de tratar caracteres especiais.
 
 Vamos usar o que aprendemos para verificar, de maneira rápida, quantas pessoas foram entrevistadas em cada RA.
 
@@ -277,7 +277,7 @@ pdad_2018_moradores <- Hmisc::upData(pdad_2018_moradores, labels = var.labels)
 Hmisc::describe(pdad_2018_moradores)
 ```
 
-Vamos agora ver como criar uma nova variável, no formato fator, atribuindo *label* (rótulo) aos valores. Faremos isso com as Regiões Administrativas de residência dos respondentes. Isso pode ser feito, dentro do pacote `dplyr`, com as funções `mutate` ou `transmute`. A primeira cria uma nova variável no banco de dados, mantendo todas as demais, enquanto a segunda mantém somente as variáveis que estão sendo criadas dentro da função. O operador `%>%` é chamado de *pipe* que serve para ligar linhas de comando no R, sem a necessidad de se *"aninhar"* funções.
+Vamos agora ver como criar uma nova variável, no formato fator, atribuindo *label* (rótulo) aos valores. Faremos isso com as Regiões Administrativas de residência dos respondentes. Isso pode ser feito, dentro do pacote `dplyr`, com as funções `mutate` ou `transmute`. A primeira cria uma nova variável no banco de dados, mantendo todas as demais, enquanto a segunda mantém somente as variáveis que estão sendo criadas dentro da função. O operador `%>%` é chamado de *pipe* que serve para ligar linhas de comando no R, sem a necessidade de se *"aninhar"* funções.
 
 ```{r}
 # Construir uma variável em formato de fator
@@ -342,7 +342,7 @@ Apesar de parecer mais complexo, isso evita que tenhamos de copiar, colar ou esc
 
 
 <div class="alert alert-info">
-*Observação: Quando estamos trabalhando com um objeto do tipo `data.frame`, podemos acessar suar colunas com o símbolo `$` após o nome do objeto. Alternativamente, podemos acessar as colunas com o operados `[,]`, no qual o lado esquerdo da vígula indica as linhas a serem acessadas e o lado esquerdo as colunas.* 
+*Observação: Quando estamos trabalhando com um objeto do tipo `data.frame`, podemos acessar suar colunas com o símbolo `$` após o nome do objeto. Alternativamente, podemos acessar as colunas com o operados `[,]`, no qual o lado esquerdo da vírgula indica as linhas a serem acessadas e o lado esquerdo as colunas.* 
 </div>
 
 
@@ -389,7 +389,7 @@ Rode novamente o gráfico anterior e veja o resultado.
 
 Posteriormente vamos aprender a realizar outras configurações nos gráficos gerados com o `ggplot`.
 
-Agora que já aprendemos a carregar e manipular a base de moradores, carregue as informações de domicílios para prosseguirmos com a análise. Adicionalmente, se for de seu interesse, atribua os labels a essa base também.
+Agora que já aprendemos a carregar e manipular a base de moradores, carregue as informações de domicílios para prosseguirmos com a análise. Adicionalmente, se for de seu interesse, atribua os *labels* a essa base também.
 
 ```{r}
 # Carregar a base completa de domicílios
@@ -417,7 +417,7 @@ Hmisc::describe(pdad_2018_domicilios)
 
 Vez ou outra nos deparamos com bases de dados que contêm variáveis do tipo data. Dentro da família `tidyverse`, temos o pacote `lubridate`, que facilita muito a manipulação deste tipo de dado. Na PDAD 2018, temos a variável `datavisita`, que traz o dia em que as informações foram coletadas no domicílio. Vamos utilizar essa variável para manipular datas.
 
-Vamos verificar como estão preencidas as primeiras linhas dessa coluna, com auxílio da função `head()`.
+Vamos verificar como estão preenchidas as primeiras linhas dessa coluna, com auxílio da função `head()`.
 
 ```{r}
 # Verificar as primeiras informações da coluna datavisita
@@ -453,7 +453,7 @@ pdad_2018_domicilios %>%
 
 Assim, temos a informação de que a coleta teve início em março e foi finalizada em outubro. Também verificamos que o mês com a maior quantidade de domicílios coletados foi agosto. Vamos verificar essas informações por Região Administrativa.
 
-Antes, vamos criar uma variável `RA` com os labels das RAs, de modo a facilitar a visualização.
+Antes, vamos criar uma variável `RA` com os *labels* das RAs, de modo a facilitar a visualização.
 
 
 ```{r}
@@ -565,7 +565,7 @@ referencias %>%
        x="Diferença de dias da pesquisa")
 ```
 
-Assim, percebemos que houve um pico de coletas logo após a data de referêcia da pesquisa, que coincide com o mês de Agosto.
+Assim, percebemos que houve um pico de coletas logo após a data de referência da pesquisa, que coincide com o mês de Agosto.
 
 ## Atualização de valores monetários
 
@@ -619,7 +619,7 @@ inflacao_wide <- inflacao %>%
 
 ```
 
-Esse formato, em que temos cada coluna um caso, é o chamado formato `wide`, cuja função `spread` "espalha" os dados no banco. Vamos, agora, voltar os dados para o formato `long`, em qua cada linha é um caso.
+Esse formato, em que temos cada coluna um caso, é o chamado formato `wide`, cuja função `spread` "espalha" os dados no banco. Vamos, agora, voltar os dados para o formato `long`, em que cada linha é um caso.
 
 ```{r}
 # Criar um objeto com os dados no formato long
@@ -709,7 +709,7 @@ O valor amostral é de R\$ `r round(mean(renda_domiciliar$renda_dom, na.rm=T))` 
 
 # Manipulação da PDAD 2018 com expansão dos resultados
 
-Conforme dito anteriormente, a PDAD 2018 é uma pesquisa amostral, desenhada para fornecer a caracterização socioeconômica e demográfica das 31 Regiões Administrativas, sendo ainda mais específicas para algumas delas (como Águas Claras, Ceilândia, Plano Piloto e São Sebastião), totalizando 38 localidades. Assim, são passos necessários para essa tarefa: definir os limites territorias; definir a área de interesse dentro desses territórios; ter uma listagem dos domicílios existentes nessas localidades (obtida a partir dos cadastros da CEB, CAESB e listagens próprias).
+Conforme dito anteriormente, a PDAD 2018 é uma pesquisa amostral, desenhada para fornecer a caracterização socioeconômica e demográfica das 31 Regiões Administrativas, sendo ainda mais específicas para algumas delas (como Águas Claras, Ceilândia, Plano Piloto e São Sebastião), totalizando 38 localidades. Assim, são passos necessários para essa tarefa: definir os limites territoriais; definir a área de interesse dentro desses territórios; ter uma listagem dos domicílios existentes nessas localidades (obtida a partir dos cadastros da CEB, CAESB e listagens próprias).
 
 A delimitação das Regiões Administrativas considerada pela PDAD 2018 pode ser observada na imagem abaixo:
 
@@ -1037,7 +1037,7 @@ piramide %>%
 piramide_grafico
 ```
 
-Para montar a pirâmide, usamos duas vezes a função `geom_bar()`, uma para desenhar a distribuição etária feminina e outra a masculina. Como o formato desejado é a pirâmide, escolhemos uma das categorias e negativamos seus valores, para que ela seja apresentada na direção oposta da abscissa. O mesmo procedimento deve ser adotado para as informações dos erros amostrais, desenhados com a função `geom_errorbar()`. Para que as informações sejam apresentadas em barras horizontais, ao invés de verticais, usamos a função `coord_flip()`, que inverte as coordenadas do gráfico. Por fim, realizamos alguns ajustes de apresentação das informações, retirando os nomes dos eixos com a função `labs()`, retirando o nome da legenda com a função `scale_fill_discrete()` e alterarando a formatação numérica dos *labels* com a função `scale_y_continuos()`. Note que, para isso, criamos uma função com uma série de argumentos de formação: valor absoluto `abs()`, alteramos a forma de exibição do separador decimal e acrescentamos um separador de milhar por ponto.
+Para montar a pirâmide, usamos duas vezes a função `geom_bar()`, uma para desenhar a distribuição etária feminina e outra a masculina. Como o formato desejado é a pirâmide, escolhemos uma das categorias e negativamos seus valores, para que ela seja apresentada na direção oposta da abscissa. O mesmo procedimento deve ser adotado para as informações dos erros amostrais, desenhados com a função `geom_errorbar()`. Para que as informações sejam apresentadas em barras horizontais, ao invés de verticais, usamos a função `coord_flip()`, que inverte as coordenadas do gráfico. Por fim, realizamos alguns ajustes de apresentação das informações, retirando os nomes dos eixos com a função `labs()`, retirando o nome da legenda com a função `scale_fill_discrete()` e alterando a formatação numérica dos *labels* com a função `scale_y_continuos()`. Note que, para isso, criamos uma função com uma série de argumentos de formação: valor absoluto `abs()`, alteramos a forma de exibição do separador decimal e acrescentamos um separador de milhar por ponto.
 
 Para construir o gráfico com os salários, os passos são análogos aos realizados para construção do gráfico anterior. A única diferença é que agora utilizamos a função `theme()` para retirar a legenda da apresentação dos dados.
 
@@ -1075,7 +1075,7 @@ salario_grafico
 ```
 
 
-Caso o desejo fosse saber a situação de salarios por RA, poderíamos fazer isso facilmente com a função `facet_wrap()`. Vamos ver como funciona, agora calculando o percentual de pessoas em cada faixa de rendimento, para as 31 RAs.
+Caso o desejo fosse saber a situação de salários por RA, poderíamos fazer isso facilmente com a função `facet_wrap()`. Vamos ver como funciona, agora calculando o percentual de pessoas em cada faixa de rendimento, para as 31 RAs.
 
 ```{r, fig.height=12, fig.width=8}
 # Carregar o pacote Scales
@@ -1301,7 +1301,7 @@ Comumente, utilizamos o primeiro *chunk* para inserir as configurações e opç�
 
 No meio do documento, podemos utilizar qualquer comando $\LaTeX$, da mesma maneira que faríamos, caso estivéssemos trabalhando com a ferramenta. Alguns atalhos facilitam uma série de formatações, como palavras em itálico, escritas entre asteriscos `*palavra*` e negrito, escritas entre duplos asteriscos `**palavra**`. Notas de rodapé são facilmente inseridas entre colchetes, precedido de um acento circunflexo `^[nota de rodapé]`. 
 
-Para inserirmos uma figura criada com o pacote `ggplot`, devemos "abrir" um *chunk* e chamar o objeto dentro dele. Para inserir o título da figura e seu respectivo label, utilizamos a opção `fig.cap="Título"`, no incício do *chunk*. O *label* deve ser adicionado por dentro do título, com o comando `\\label{}`, este último derivado do $\LaTeX$. Repare que, neste caso, foi necessário inserir uma segunda barra invertida, de modo que o R entenda que estamos querendo utilizar um comando do $\LaTeX$ dentro do *chunk*. Para fazer referência ao elemento, utilizer o comando `\ref{}` dentro do texto.
+Para inserirmos uma figura criada com o pacote `ggplot`, devemos "abrir" um *chunk* e chamar o objeto dentro dele. Para inserir o título da figura e seu respectivo *label*, utilizamos a opção `fig.cap="Título"`, no início do *chunk*. O *label* deve ser adicionado por dentro do título, com o comando `\\label{}`, este último derivado do $\LaTeX$. Repare que, neste caso, foi necessário inserir uma segunda barra invertida, de modo que o R entenda que estamos querendo utilizar um comando do $\LaTeX$ dentro do *chunk*. Para fazer referência ao elemento, utilizer o comando `\ref{}` dentro do texto.
 
 Para as tabelas, utilizamos o pacote `xtable`. Diferentemente das figuras, este pacote já esta preparado para receber as informações de título e *label* da tabela em parâmetros específicos, convertendo o resultado para a linguagem $\LaTeX$. Para algumas formatações adicionais, como separador de milhar, posicionamento da tabela e marcador decimal, precisamos da função `print()`.
 
@@ -1407,7 +1407,7 @@ Para as tabelas, utilizamos o pacote `xtable`. Diferentemente das figuras, este 
 # ```
 ```
 
-O relatório criado em PDF pode ser facilmente gerado em outros formatos. Experimento clicar no botão knit, na seta para baixo, selecionando a opção `Knit to Word`. O relatório também pode ser gerado no formato `HTML`, todavia as tabelas necessitam de alguns ajustes neste caso. Tevemos alterar o tipo da tabela para `"html"`, com o argumento `type`, dentro do print. Alternativamente, podemos utilizar as funções `knitr::kable()` ou `pander::pander()`.
+O relatório criado em PDF pode ser facilmente gerado em outros formatos. Experimento clicar no botão knit, na seta para baixo, selecionando a opção `Knit to Word`. O relatório também pode ser gerado no formato `HTML`, todavia as tabelas necessitam de alguns ajustes neste caso. Devemos alterar o tipo da tabela para `"html"`, com o argumento `type`, dentro do print. Alternativamente, podemos utilizar as funções `knitr::kable()` ou `pander::pander()`.
 
 # Encerramento
 
