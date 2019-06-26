@@ -1295,7 +1295,7 @@ Rode o arquivo de exemplo, clicando no botão `knit`, para verificar o resultado
 
 <img src="figuras/tricote.png" style="width: 800px;display: block;margin-left: auto;margin-right: auto "/>
 
-Vamos agora criar o nosso relatório. Para isso, vamos utilizar apenas dois pacotes do $\LaTeX$, o `babel`, para conseguirmos produzir o relatório em português, e o pacote `inputenc`, que cuidará do encoding dos caracteres. Fazemos isso adicionando no preâmbulo do documento a linha `header-includes:`, indicando os pacotes do $\LaTeX$ a serem utilizados. Qualquer outro pacote pode ser inserido neste espaço.
+Vamos agora criar o nosso relatório. Para isso, vamos utilizar apenas dois pacotes do $\LaTeX$, o `babel`, para conseguirmos produzir o relatório em português, e o pacote `inputenc`, que cuidará do encoding dos caracteres. Fazemos isso adicionando no preâmbulo do documento a linha `header-includes:`, indicando os pacotes do $\LaTeX$ a serem utilizados. Qualquer outro pacote pode ser inserido neste espaço. Para rodar o relatório em PDF, você precisará ter alguma distribuição do `TeX/LaTeX`. Uma opção é o [MiKTeK](https://miktex.org/download). Durante a instalação, marque a opção *"Install missing packages on-the-fly"* como *"yes"*.
 
 Comumente, utilizamos o primeiro *chunk* para inserir as configurações e opções a serem utilizadas no decorrer do documento. Note que utilizamos a opção `include=FALSE` para que este *chunk* não seja incluído no documento. Nele, carregamos os pacotes necessários, ajustamos as configurações padrão dos demais *chunks*, carregamos a base e ajustamos uma configuração do pacote `xtable`, que será utilizado para gerar nossas tabelas no formato $\LaTeX$. 
 
