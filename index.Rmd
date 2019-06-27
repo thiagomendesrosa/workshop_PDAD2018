@@ -1250,7 +1250,7 @@ Agora que fizemos todos esses objetos contendo nossos gráficos, vamos criar um 
 # Salvar um arquivo com todos os objetos
 save.image("bases/objetos.rda", compress = T)
 # Remover todos os objetos do ambiente
-rm(list = ls())
+# rm(list = ls())
 # Carregar os objetos salvos
 load("bases/objetos.rda")
 ```
